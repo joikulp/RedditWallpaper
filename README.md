@@ -17,3 +17,5 @@ http://php.net/manual/en/function.getimagesize.php
 http://php.net/manual/en/function.imagesy.php
 
 http://php.net/manual/en/function.imagesx.php
+
+https://www.reddit.com/dev/api
