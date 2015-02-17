@@ -4,11 +4,11 @@
 		private $subreddit = array();
 		private $username = false;
 		private $password = false;
-		private $file = false;
+		private $img = false;
 
 		public $fileType = array();
 		public $expiration = false;
-		public $mininumUps = 42;
+		public $mininumUps = false;
 		public $saveDir = false;
 		public $tempDir = false;
 		public $data = array();
@@ -32,28 +32,80 @@
 			} else if ($subreddit) {
 				$this->subreddit[] = $subreddit;
 			}
-			foreach ($subreddit as $sr) {
+		}
+
+		public function scanSubreddits ()
+		{
+			foreach ($this->subreddit as $sr) {
 				if (!in_array($sr, $this->data)) {
 					$data = json_decode(file_get_contents($this->prefix.$sr.$this->suffix));
 					foreach ($data->data->children as $row) {
-						$img_name_parts = explode('.', $row->url);
-						$img_name_extension = end($img_name_parts);
-						
-						if (!in_array($img_name_extension, $this->fileType)) {
-							continue;
-						}
-						$img = file_get_contents($row->url);
-						$img_md5 = md5($img);
-						
-						$img_save_path = $dir_save.$img_md5.$img_name_extension;
-						$img_temp_path = $dir_temp.$img_md5.$img_name_extension;
-						
-						file_put_contents($img_temp_path, $row->url);
-						$row->data->file = file_get_contents($row->url);
-						$this->data[$sr] = $row->data;
+						$this->data[$sr][] = $row->data;
 					}
 				}
 			}
+		}
+
+		public function validate ($row)
+		{
+			// Correct extension
+			if ($this->fileType) {
+				$img_name_parts = explode('.', $row->url);
+				$img_name_extension = end($img_name_parts);
+				if (!in_array($img_name_extension, $this->fileType)) {
+					return false;
+				}
+			}
+
+			// Minimum ups requirement met
+			if ($this->mininumUps) {
+				if ($row->ups < $this->mininumUps) {
+					return false;
+				}
+			}
+
+			// File does not exist already
+			$img = file_get_contents($row->url);
+			$img_md5 = md5($img);
+			$save_path = $this->saveDir .'/'. $img_md5 .'.'. $img_name_extension;
+			$temp_path = $this->tempDir .'/'. $img_md5 .'.'. $img_name_extension;
+			if (file_exists($save_path)) {
+				return false;
+			} else {
+				$this->img = $img_md5 .'.'. $img_name_extension;
+				file_put_contents($temp_path, $img);
+			}
+
+			return true;
+		}
+
+		public function saveWallpaper ($keep)
+		{
+			if ($this->img) {
+				if ($keep) {
+					rename($this->tempDir .'/'. $this->img, $this->saveDir .'/'. $this->img);
+				} else {
+					unlink($this->tempDir .'/'. $this->img);
+				}
+				$this->img = false;
+			} else {
+				return false;
+			}
+			return true;
+		}
+
+		public function deleteExpiredWallpaper ()
+		{
+			if ($this->expiration) {
+				foreach (scandir($this->saveDir) as $file) {
+					if (strtotime('-'. $this->expiration) > filemtime($this->saveDir .'/'. $file)) {
+						unlink($this->saveDir .'/'. $file);
+					}
+				}
+			} else {
+				return false;
+			}
+			return true;
 		}
 	}
 ?>
