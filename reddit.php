@@ -12,7 +12,7 @@
 	$reddit->saveDir = 'wallpaper';
 	$reddit->tempDir = 'wallpaper_temp';
 	$reddit->author = false;
-	$reddit->mininumUps = 2;
+	$reddit->mininumUps = 42;
 
 	$reddit->scanSubreddits();
 	foreach ($reddit->data as $subreddits) {
