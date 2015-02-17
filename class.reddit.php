@@ -1,20 +1,22 @@
 <?php
 	class reddit {
 
-		private $subreddit = array();
-		private $username = false;
-		private $password = false;
-		private $img = false;
+		private $subreddit	= array();
+		private $username	= false;
+		private $password	= false;
+		private $img		= false;
 
-		public $fileType = array();
-		public $expiration = false;
-		public $mininumUps = false;
-		public $saveDir = false;
-		public $tempDir = false;
-		public $data = array();
+		public $fileType	= array();
+		public $expiration	= false;
+		public $mininumUps	= false;
+		public $author		= false;
 
-		private $prefix = 'https://www.reddit.com/r/';
-		private $suffix = '/new.json?sort=new';
+		public $saveDir		= false;
+		public $tempDir		= false;
+		public $data		= array();
+
+		private $prefix		= 'https://www.reddit.com/r/';
+		private $suffix		= '/new.json?sort=new';
 
 		public function __construct ($subreddit = false, $username = false, $password = false)
 		{
@@ -60,6 +62,13 @@
 			// Minimum ups requirement met
 			if ($this->mininumUps) {
 				if ($row->ups < $this->mininumUps) {
+					return false;
+				}
+			}
+
+			// Only this author
+			if ($this->author) {
+				if ($row->author != $this->author) {
 					return false;
 				}
 			}

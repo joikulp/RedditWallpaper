@@ -11,6 +11,7 @@
 	$reddit->expiration = '1 year'; // php strtotime used
 	$reddit->saveDir = 'wallpaper';
 	$reddit->tempDir = 'wallpaper_temp';
+	$reddit->author = false;
 	$reddit->mininumUps = 2;
 
 	$reddit->scanSubreddits();
