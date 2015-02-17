@@ -5,11 +5,11 @@ Gets wallpaper from subreddits and saves to local dirs to be used as wallpaper o
 
 - [ ] Possibility to accept only HD pictures (Or look for specific picture size)
 - [ ] Maximum/Minimum file size
-- [ ] Minimum up votes ($row->ups)
+- [x] Minimum up votes ($row->ups)
 - [ ] Download pictures that contain certain words (Search for words in $row->title and $row->url)
 - [ ] Download pictures from certain author ($row->author)
 - [ ] Download pictures saved by user on chosen subreddits (Requires reddit user login) (Create dummy reddit user for testing)
-- [ ] Create class for interaction with reddit for readability
+- [x] Create class for interaction with reddit for readability
 
 # Subreddits:
 Offensive_Wallpapers
