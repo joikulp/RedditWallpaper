@@ -10,9 +10,9 @@
 	$reddit->fileType = array('jpg', 'png');
 	$reddit->expiration = '1 year'; // php strtotime used
 	$reddit->saveDir = 'wallpaper';
-	$reddit->tempDir = 'wallpaper_temp';
 	$reddit->author = false;
-	$reddit->mininumUps = 42;
+	$reddit->mininumUps = 5;
+	$reddit->minimumWidth = 3840;
 
 	$reddit->scanSubreddits();
 	foreach ($reddit->data as $subreddits) {
@@ -21,4 +21,3 @@
 		}
 	}
 	$reddit->deleteExpiredWallpaper();
-?>
