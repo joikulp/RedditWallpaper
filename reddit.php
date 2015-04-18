@@ -11,8 +11,9 @@
 	$reddit->expiration = '1 year'; // php strtotime used
 	$reddit->saveDir = 'wallpaper';
 	$reddit->author = false;
-	$reddit->mininumUps = 5;
-	$reddit->minimumWidth = 3840;
+	$reddit->mininumUps = 30;
+	$reddit->minimumWidth = 1920;
+	$reddir->minimumHeight = 1080;
 
 	$reddit->scanSubreddits();
 	foreach ($reddit->data as $subreddits) {
