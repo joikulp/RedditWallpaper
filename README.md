@@ -3,8 +3,8 @@ Gets wallpaper from subreddits and saves to local dirs to be used as wallpaper o
 
 # To-Do:
 
-- [ ] Possibility to accept only HD pictures (Or look for specific picture size)
-- [ ] Maximum/Minimum file size
+- [X] Possibility to accept only HD pictures (Or look for specific picture size)
+- [x] Maximum/Minimum file size
 - [x] Minimum up votes ($row->ups)
 - [ ] Download pictures that contain certain words (Search for words in $row->title and $row->url)
 - [x] Download pictures from certain author ($row->author)

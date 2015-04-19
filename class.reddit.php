@@ -14,6 +14,8 @@
 		public $minimumHeight	= false;
 		public $maximumWidth	= false;
 		public $maximumHeight	= false;
+		public $minumumFilesize	= false;
+		public $maximumFilesize	= false;
 
 		public $saveDir			= false;
 		public $tempDir			= false;
@@ -49,8 +51,10 @@
 			foreach ($this->subreddit as $sr) {
 				if (!in_array($sr, $this->data)) {
 					$data = json_decode($this->_download($this->prefix.$sr.$this->suffix));
-					foreach ($data->data->children as $row) {
-						$this->data[$sr][] = $row->data;
+					if (isset($data->data)) {
+						foreach ($data->data->children as $row) {
+							$this->data[$sr][] = $row->data;
+						}
 					}
 				}
 			}
@@ -104,30 +108,42 @@
 
 		private function _validateSize ($file)
 		{
-			$return = true;
-
 			if ($this->minimumWidth || $this->minimumHeight || $this->maximumWidth || $this->maximumHeight) {
 
 				list($width, $height) = getimagesize($file);
 
 				if ($this->minimumWidth && $this->minimumWidth > $width) {
-					$return = false;
+					return false;
 				}
 
 				if ($this->minimumHeight && $this->minimumHeight > $height) {
-					$return = false;
+					return false;
 				}
 
 				if ($this->maximumWidth && $this->maximumWidth < $width) {
-					$return = false;
+					return false;
 				}
 
 				if ($this->maximumHeight && $this->maximumHeight < $height) {
-					$return = false;
+					return false;
 				}
 			}
 
-			return $return;
+			if ($this->minimumFilesize || $this->maximumFilesize) {
+
+				$size = filesize($file);
+
+				if ($this->minimumFilesize && $this->minimumFilesize > $size) {
+					return false;
+				}
+
+				if ($this->maximumFilesize && $this->maximumFilesize < $size) {
+					return false;
+				}
+
+			}
+
+			return true;
 		}
 
 		public function saveWallpaper ($keep)
