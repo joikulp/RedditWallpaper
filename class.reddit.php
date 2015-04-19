@@ -9,9 +9,11 @@
 		public $fileType		= array();
 		public $expiration		= false;
 		public $mininumUps		= false;
+		public $author			= false;
 		public $minimumWidth	= false;
 		public $minimumHeight	= false;
-		public $author			= false;
+		public $maximumWidth	= false;
+		public $maximumHeight	= false;
 
 		public $saveDir			= false;
 		public $tempDir			= false;
@@ -104,7 +106,7 @@
 		{
 			$return = true;
 
-			if ($this->minimumWidth || $this->minimumHeight) {
+			if ($this->minimumWidth || $this->minimumHeight || $this->maximumWidth || $this->maximumHeight) {
 
 				list($width, $height) = getimagesize($file);
 
@@ -113,6 +115,14 @@
 				}
 
 				if ($this->minimumHeight && $this->minimumHeight > $height) {
+					$return = false;
+				}
+
+				if ($this->maximumWidth && $this->maximumWidth < $width) {
+					$return = false;
+				}
+
+				if ($this->maximumHeight && $this->maximumHeight < $height) {
 					$return = false;
 				}
 			}
